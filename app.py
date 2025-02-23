@@ -1,7 +1,6 @@
 import streamlit as st
 import uuid
 
-# Initialize session state if not already initialized
 if 'tasks' not in st.session_state:
     st.session_state.tasks = []
 if 'incompleted_tasks' not in st.session_state:
@@ -9,21 +8,18 @@ if 'incompleted_tasks' not in st.session_state:
 if 'priority_tasks' not in st.session_state:
     st.session_state.priority_tasks = []
 
-# Sidebar Navigation
 st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Home", "About", "Contact Us"])
 
 if page == "Home":
     st.title("Complete Growth Mindset - To-Do List")
 
-    # Input for new task
     task_input = st.text_input("Enter a new task:")
     priority = st.selectbox("Select Priority:", ["High", "Medium", "Low"], index=1)
     if st.button("Add Task") and task_input:
         priority_color = "red" if priority == "High" else "orange" if priority == "Medium" else "yellow"
         st.session_state.tasks.append({"id": str(uuid.uuid4()), "task": task_input, "completed": False, "priority": priority, "color": priority_color})
 
-    # Display tasks
     st.subheader("Your Tasks")
     for index, task in enumerate(st.session_state.tasks):
         col1, col2, col3, col4, col5 = st.columns([0.3, 5.4, 1, 1, 1])
@@ -49,7 +45,6 @@ if page == "Home":
         for task in st.session_state.incompleted_tasks:
             st.markdown(f"<span style='color:red; font-weight:bold;'>❌ {task['task']}</span>", unsafe_allow_html=True)
 
-    # Clear all tasks
     if st.button("Clear All"):
         st.session_state.tasks = []
         st.session_state.incompleted_tasks = []
