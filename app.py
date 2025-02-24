@@ -2,13 +2,10 @@
 
 import streamlit as st
 import uuid
-from datetime import datetime, timedelta
-import time
 
 st.set_page_config(page_title="DailyTask - TODO", page_icon="check.png", layout="wide")
 
 
-# Initialize session state if not already initialized
 if 'tasks' not in st.session_state:
     st.session_state.tasks = []
 if 'incompleted_tasks' not in st.session_state:
@@ -24,8 +21,8 @@ st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Home", "Task Analytics",  "About", "Contact Us"])
 
 if page == "Home":
-    st.title("Complete Growth Mindset - AI To-Do List")
-    
+    st.title("Complete Growth Mindset - To-Do List")
+
     task_input = st.text_input("Enter a new task:")
     priority = st.selectbox("Select Priority:", ["High", "Medium", "Low"], index=1)
     recurring = st.selectbox("Repeat Task:", ["None", "Daily", "Weekly", "Monthly"], index=0)
@@ -60,6 +57,12 @@ if page == "Home":
                 st.session_state.incompleted_tasks.append(task)
                 st.session_state.tasks = [t for t in st.session_state.tasks if t['id'] != task['id']]
                 st.rerun()
+
+    # Display incompleted tasks
+    if st.session_state.incompleted_tasks:
+        st.subheader("INCOMPLETED TASKS")
+        for task in st.session_state.incompleted_tasks:
+            st.markdown(f"<span style='color:red; font-weight:bold;'>❌ {task['task']}</span>", unsafe_allow_html=True)
 
     if st.button("Clear All"):
         st.session_state.tasks = []
